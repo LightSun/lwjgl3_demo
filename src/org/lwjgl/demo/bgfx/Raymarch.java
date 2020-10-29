@@ -29,14 +29,16 @@ public class Raymarch extends Demo {
     private short program;
     private short uniformMtx;
     private short uniformLightDirTime;
-
+    //视图矩阵
     private Matrix4x3f view = new Matrix4x3f();
     private FloatBuffer viewBuf;
+    //模型矩阵
     private Matrix4f proj = new Matrix4f();
     private FloatBuffer projBuf;
-
+    //正交
     private Matrix4x3f ortho = new Matrix4x3f();
     private FloatBuffer orthoBuf;
+
     private Matrix4f vp = new Matrix4f();
     private Matrix4x3f mtx = new Matrix4x3f();
     private Matrix4f mtxInv = new Matrix4f();
@@ -127,6 +129,7 @@ public class Raymarch extends Demo {
     @Override
     protected void create() throws IOException {
         layout = BGFXDemoUtil.createVertexLayout(false, true, 1);
+        layoutHandle = bgfx_create_vertex_layout(layout);
 
         uniformMtx = bgfx_create_uniform("u_mtx", BGFX_UNIFORM_TYPE_MAT4, 1);
         uniformLightDirTime = bgfx_create_uniform("u_lightDirTime", BGFX_UNIFORM_TYPE_VEC4, 1);
@@ -163,7 +166,7 @@ public class Raymarch extends Demo {
 
         mtx.setRotationXYZ(time, time * 0.37f, 0.0f)
            .invert(mtxInv);
-
+        //光照方向模型
         Vector4f lightDirModel = new Vector4f(-0.4f, -0.5f, -1.0f, 0.0f);
         Vector4f lightDirModelN = new Vector4f();
         lightDirModel.normalize(lightDirModelN);
